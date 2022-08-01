@@ -1,0 +1,34 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="start strench"
+  fxLayoutGap="1em"
+  class="users-wrapper"
+  *ngIf="vm$ | async as vm"
+>
+  <h1>Users</h1>
+  <mat-divider></mat-divider>
+  <app-users-actions-panel
+    [isSelectAll]="vm.isSelectAll"
+    [canSelectAll]="vm.canSelectAll"
+    [clearDisabled]="vm.clearDisabled"
+    [deleteDisabled]="vm.deleteDisabled"
+    [filterDisabled]="vm.filterDisabled"
+    [unfilterDisabled]="vm.unfilterDisabled"
+    [keyword]="vm.keyword"
+    [count]="vm.count"
+    (emitSelectAll)="onSelectAll($event)"
+    (emitSearch)="onSearch($event)"
+    (emitClear)="onClear()"
+    (emitFilter)="onFilter()"
+    (emitUnfilter)="onUnfilter()"
+    (emitSortChange)="onSortChange($event)"
+    (emitPageChange)="onPageChange($event)"
+  ></app-users-actions-panel>
+  <mat-divider></mat-divider>
+  <app-users-list
+    [isLoading]="vm.isLoading"
+    [users]="vm.users"
+    [selectAll]="vm.selectAll"
+    (emitSelectedUsers)="onSelectUsers($event)"
+  ></app-users-list>
+</div>

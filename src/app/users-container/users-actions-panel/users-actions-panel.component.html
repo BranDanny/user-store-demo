@@ -1,0 +1,67 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" [formGroup]="form">
+  <mat-checkbox formControlName="selectAll">Select All</mat-checkbox>
+  <button
+    mat-mini-fab
+    color="white"
+    [disabled]="clearDisabled"
+    (click)="clearSelected()"
+  >
+    <mat-icon>clear</mat-icon>
+  </button>
+
+  <!-- <button
+    mat-mini-fab
+    color="primary"
+    [disabled]="filterDisabled"
+    (click)="filterSelected()"
+  >
+    <mat-icon>filter_list</mat-icon>
+  </button> -->
+
+  <button
+    mat-mini-fab
+    color="primary"
+    [disabled]="unfilterDisabled"
+    (click)="unfilterSelected()"
+  >
+    <mat-icon>filter_list_off</mat-icon>
+  </button>
+
+  <button mat-mini-fab color="warn" [disabled]="deleteDisabled">
+    <mat-icon>delete</mat-icon>
+  </button>
+
+  <mat-form-field fxFlex="1 1 80%">
+    <input
+      formControlName="search"
+      matInput
+      autocomplete="off"
+      placeholder="Search"
+    />
+  </mat-form-field>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="3em">
+  <div
+    matSort
+    (matSortChange)="sortChanged($event)"
+    [matSortDisableClear]="true"
+    matSortActive="createAt"
+    matSortDirection="asc"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    fxLayoutGap="1em"
+  >
+    <p mat-sort-header="createAt">Date</p>
+    <p mat-sort-header="name">Name</p>
+    <p mat-sort-header="surname">Surname</p>
+    <p mat-sort-header="email">Email</p>
+  </div>
+  <mat-paginator
+    [length]="count"
+    [pageSize]="10"
+    [hidePageSize]="true"
+    (page)="pageChanged($event)"
+  >
+  </mat-paginator>
+</div>
