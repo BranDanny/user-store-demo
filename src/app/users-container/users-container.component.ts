@@ -1,16 +1,14 @@
-import { ListCriteria } from "./../users.service";
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Observable, Subject } from "rxjs";
 import { filter, takeUntil } from "rxjs/operators";
+import { ListCriteria } from "./../users.service";
 import {
   ContainerState,
-  FilterTypeEnum,
-  pageChnageModel,
   sortChangeModel,
   User,
   UsersStoreService,
 } from "./users-store.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-users-container",
@@ -21,7 +19,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class UsersContainerComponent implements OnInit {
   public vm$: Observable<ContainerState>;
-  public criteria$: Observable<ListCriteria>;
+
   public error$: Observable<any>;
 
   public unsubscribe = new Subject();
@@ -31,12 +29,10 @@ export class UsersContainerComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.vm$ = this.$store.userState$;
-    this.criteria$ = this.$store.criteria$;
     this.error$ = this.$store.error$.pipe(filter((e) => !!e));
   }
 
   ngOnInit(): void {
-    this.$store.getUsersList(this.criteria$);
     this.error$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((e) =>

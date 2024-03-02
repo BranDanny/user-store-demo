@@ -74,6 +74,33 @@ export const initialState = {
 export class UsersStoreService extends ComponentStore<UserState> {
   constructor(private $http: UsersService) {
     super(initialState);
+
+    this.effect(() => {
+      return this.criteria$.pipe(
+        tap(() => {
+          this.patchState({
+            isLoading: true,
+          });
+        }),
+        switchMap((criteria) => this.$http.list(criteria)),
+        tap({
+          next: (response: any) => {
+            this.patchState({
+              isLoading: false,
+              users: response["results"],
+              count: response["count"],
+            });
+          },
+          error: (error) => {
+            this.patchState({
+              isLoading: false,
+              error,
+            });
+          },
+        }),
+        catchError(() => EMPTY)
+      );
+    });
   }
 
   // state selectors
@@ -201,33 +228,6 @@ export class UsersStoreService extends ComponentStore<UserState> {
       filterType,
     });
   }
-
-  readonly getUsersList = this.effect((criteria$: Observable<ListCriteria>) => {
-    return criteria$.pipe(
-      tap(() => {
-        this.patchState({
-          isLoading: true,
-        });
-      }),
-      switchMap((criteria) => this.$http.list(criteria)),
-      tap({
-        next: (response: any) => {
-          this.patchState({
-            isLoading: false,
-            users: response["results"],
-            count: response["count"],
-          });
-        },
-        error: (error) => {
-          this.patchState({
-            isLoading: false,
-            error,
-          });
-        },
-      }),
-      catchError(() => EMPTY)
-    );
-  });
 
   public onFilter() {
     const criteria = { ...this.get((state) => state.criteria), search: "" };
